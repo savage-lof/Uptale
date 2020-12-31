@@ -1,6 +1,6 @@
 import pygame
 from TestGamePlay import gg_sprite, gg_left, gg_right, all_sprites, camera, width, height, walls, screen, gg_stop_l, \
-    gg_stop_r
+    gg_stop_r, sprite_press_dragon, text2
 
 fps = 144
 clock = pygame.time.Clock()
@@ -13,6 +13,7 @@ move = False
 direction = 2
 running = True
 while running:
+    screen.fill(pygame.Color("black"))
     gg_stop_l.rect = gg_sprite.rect
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -85,10 +86,13 @@ while running:
                 gg_sprite.rect.x -= s
             if move_left:
                 gg_sprite.rect.x += s
-    screen.fill(pygame.Color("black"))
+
     all_sprites.draw(screen)
     all_sprites.update()
     clock.tick(150)
+    if pygame.sprite.collide_rect(gg_stop_l, sprite_press_dragon):
+        screen.blit(text2, (350, 500))
+    pygame.display.update()
     pygame.display.flip()
 
 pygame.quit()
