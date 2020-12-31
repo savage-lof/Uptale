@@ -18,18 +18,14 @@ walls.append(Tile('side_wall.png', (850 - 240, 450 - 68), 'wall'))
 walls.append(Tile('side_wall.png', (850 + 240, 450 - 68), 'wall'))
 floor = Tile('floor.png', (850, 450), 'floor')
 
-dragon = AnimatedSprite(load_image("pygame-8-1 (1).png"), 8, 2, 608, 120, all_sprites)
-mask_dragon = pygame.mask.from_surface(dragon.image)
-walls.append(dragon)
-sprite_press_dragon = pygame.sprite.Sprite()
-sprite_press_dragon.image = dragon.frames[0]
-sprite_press_dragon.rect = dragon.rect
+npc = AnimatedSprite(load_image("npc.png"), 4, 1, 625, 110, all_sprites, 25)
+walls.append(npc)
 
-gg_right = AnimatedSprite(load_image("right_player.png"), 8, 1, 850, 450, sprites)
-gg_left = AnimatedSprite(load_image("left_player.png"), 8, 1, 850, 450, sprites)
-gg_sprite = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, 850, 450, all_sprites)
-gg_stop_r = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, 850, 450, sprites)
-gg_stop_l = AnimatedSprite(load_image("left_player_stop.png"), 1, 1, 850, 450, sprites)
+gg_right = AnimatedSprite(load_image("right_player.png"), 8, 1, 850, 450, sprites, 15)
+gg_left = AnimatedSprite(load_image("left_player.png"), 8, 1, 850, 450, sprites, 15)
+gg_sprite = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, 850, 450, all_sprites, 15)
+gg_stop_r = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, 850, 450, sprites, 15)
+gg_stop_l = AnimatedSprite(load_image("left_player_stop.png"), 1, 1, 850, 450, sprites, 15)
 
 f2 = pygame.font.Font(None, 48)
 text2 = f2.render("Press F", False, pygame.Color("white"))

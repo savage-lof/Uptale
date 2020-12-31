@@ -2,7 +2,7 @@ import pygame
 
 
 class AnimatedSprite(pygame.sprite.Sprite):
-    def __init__(self, sheet, columns, rows, x, y, sprites):
+    def __init__(self, sheet, columns, rows, x, y, sprites, count):
         super().__init__(sprites)
         self.frames = []
         self.cut_sheet(sheet, columns, rows)
@@ -10,6 +10,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.image = self.frames[self.cur_frame]
         self.rect = self.rect.move(x, y)
         self.i = 0
+        self.count = count
 
     def cut_sheet(self, sheet, columns, rows):
         self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
@@ -22,7 +23,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
 
     def update(self):
         self.i += 1
-        if self.i == 15:
+        if self.i == self.count:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
             self.i = 0

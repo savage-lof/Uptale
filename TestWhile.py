@@ -1,6 +1,7 @@
 import pygame
 from TestGamePlay import gg_sprite, gg_left, gg_right, all_sprites, camera, width, height, walls, screen, gg_stop_l, \
-    gg_stop_r, sprite_press_dragon, text2
+    gg_stop_r, npc, text2
+from TestStartScreen import screen_start
 
 fps = 144
 clock = pygame.time.Clock()
@@ -11,6 +12,7 @@ move_up = False
 move_down = False
 move = False
 direction = 2
+f_press = False
 running = True
 while running:
     screen.fill(pygame.Color("black"))
@@ -18,42 +20,47 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+        if event.type == pygame.KEYDOWN and (event.key == pygame.K_LEFT or event.key == pygame.K_a):
             move_left = True
             move = True
             direction = 1
             gg_sprite.frames = gg_left.frames
-        if event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
+        if event.type == pygame.KEYUP and (event.key == pygame.K_LEFT or event.key == pygame.K_a):
             move_left = False
             move = False
 
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+        if event.type == pygame.KEYDOWN and (event.key == pygame.K_RIGHT or event.key == pygame.K_d):
             move_right = True
             move = True
             direction = 2
             gg_sprite.frames = gg_right.frames
-        if event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
+        if event.type == pygame.KEYUP and (event.key == pygame.K_RIGHT or event.key == pygame.K_d):
             move_right = False
             move = False
 
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
+        if event.type == pygame.KEYDOWN and (event.key == pygame.K_UP or event.key == pygame.K_w):
             move_up = True
             move = True
             if direction == 1:
                 gg_sprite.frames = gg_left.frames
             elif direction == 2:
                 gg_sprite.frames = gg_right.frames
-        if event.type == pygame.KEYUP and event.key == pygame.K_UP:
+        if event.type == pygame.KEYUP and (event.key == pygame.K_UP or event.key == pygame.K_w):
             move_up = False
 
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
+        if event.type == pygame.KEYDOWN and (event.key == pygame.K_DOWN or event.key == pygame.K_s):
             move_down = True
             if direction == 1:
                 gg_sprite.frames = gg_left.frames
             elif direction == 2:
                 gg_sprite.frames = gg_right.frames
-        if event.type == pygame.KEYUP and event.key == pygame.K_DOWN:
+        if event.type == pygame.KEYUP and (event.key == pygame.K_DOWN or event.key == pygame.K_s):
             move_down = False
+
+        if event.type == pygame.KEYUP and event.key == pygame.K_f:
+            if f_press:
+                screen_start()
+
     camera.update(gg_sprite, width, height)
     for sprite in all_sprites:
         camera.apply(sprite)
@@ -90,8 +97,10 @@ while running:
     all_sprites.draw(screen)
     all_sprites.update()
     clock.tick(150)
-    if pygame.sprite.collide_rect(gg_stop_l, sprite_press_dragon):
+    f_press = False
+    if pygame.sprite.collide_rect(gg_stop_l, npc):
         screen.blit(text2, (350, 500))
+        f_press = True
     pygame.display.update()
     pygame.display.flip()
 
