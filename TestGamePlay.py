@@ -12,14 +12,17 @@ size = width, height = 800, 800
 screen = pygame.display.set_mode(size)
 walls = list()
 
-walls.append(Tile('up_wall.png', (850, 450 - 378), 'wall'))
+walls.append(Tile('up_wall_new.png', (850, 450 - 378), 'wall'))
 walls.append(Tile('dawn_wall.png', (850, 450 + 310), 'wall'))
 walls.append(Tile('side_wall.png', (850 - 240, 450 - 68), 'wall'))
 walls.append(Tile('side_wall.png', (850 + 240, 450 - 68), 'wall'))
-floor = Tile('floor.png', (850, 450), 'floor')
+floor = Tile('floor_new.png', (850, 450), 'floor')
 
-npc = AnimatedSprite(load_image("npc.png"), 4, 1, 625, 110, all_sprites, 25)
+npc = AnimatedSprite(load_image("npc.png"), 4, 1, 735, 105, all_sprites, 25)
 walls.append(npc)
+gerl = AnimatedSprite(load_image("gerl.png"), 1, 7, 600, 50, all_sprites, 15)
+walls.append(AnimatedSprite(load_image('el.png'), 9, 1, 850 - 51, 20, all_sprites, 35))
+
 
 gg_right = AnimatedSprite(load_image("right_player.png"), 8, 1, 850, 450, sprites, 15)
 gg_left = AnimatedSprite(load_image("left_player.png"), 8, 1, 850, 450, sprites, 15)
