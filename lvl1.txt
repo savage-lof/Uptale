@@ -1,0 +1,13 @@
+up_wall_new.png-850-72-wall;
+dawn_wall.png-850-760-wall;
+side_wall.png-610-382-wall;
+side_wall.png-1090-382-wall;
+floor_new.png-850-450-floor;
+
+npc.png-4-1-735-105-all_sprites-25-npc;
+
+right_player.png-8-1-850-450-sprites-15-right_player;
+left_player.png-8-1-850-450-sprites-15-left_player;
+right_player_stop.png-1-1-850-450-sprites-15-right_player_stop;
+left_player_stop.png-1-1-850-450-sprites-15-left_player_stop;
+
