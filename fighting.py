@@ -96,8 +96,9 @@ class Blinking(pygame.sprite.Sprite):
                          (0, 0, w, h))
         self.rect = pygame.Rect(x1, y1, w, h)
 
-    def update(self):
+    def update(self, sound):
         if self.count_of_blinking == 8:
+            sound.stop()
             blinking_sprites.remove(self)
             Killer(self.rect)
         current_time = pygame.time.get_ticks()
@@ -118,6 +119,7 @@ def fighting():
     width, height = 1600, 900
     screen = pygame.display.set_mode((width, height))
 
+    soundObj = pygame.mixer.Sound('data/alarm.wav')
     gamefont = pygame.font.SysFont('Comic Sans MS', 30)
 
     border_left_x = (width / 2 - horizontal_border_size / 2) - 1
@@ -154,19 +156,23 @@ def fighting():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                soundObj.stop()
                 pygame.mixer.music.stop()
                 return
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
+                    soundObj.play()
                     Blinking(border_left_x + 1, border_top_y + 1, 100, 350)
                     Blinking(border_right_x - 100, border_top_y + 1, 100, 350)
 
                 if event.key == pygame.K_2:
+                    soundObj.play()
                     Blinking(border_left_x + 1, border_top_y + 1, 350, 50)
                     Blinking(border_left_x + 1, border_top_y + 151, 350, 50)
                     Blinking(border_left_x + 1, border_bottom_y - 50, 350, 50)
 
                 if event.key == pygame.K_3:
+                    soundObj.play()
                     Blinking(border_left_x + 1, border_top_y + 1, 350, 300)
                     Blinking(border_left_x + 1, border_top_y + 301, 300, 50)
 
@@ -199,10 +205,11 @@ def fighting():
             player.move(0, tomove)
 
         if not player.islive:
+            soundObj.stop()
             pygame.mixer.music.stop()
             return
         screen.fill(pygame.Color('black'))
-        blinking_sprites.update()
+        blinking_sprites.update(soundObj)
         killer_sprites.update(dt)
         player_sprite.update(gamefont)
 
