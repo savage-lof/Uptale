@@ -1,6 +1,8 @@
 import pygame
-from TestGamePlay import screen
 from TestStartSceenClass import GameScreen
+
+size = width, height = 800, 800
+screen = pygame.display.set_mode(size)
 
 
 def screen_start():

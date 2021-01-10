@@ -1,11 +1,16 @@
 import pygame
-from TestGamePlay import gg_sprite, gg_left, gg_right, all_sprites, camera, width, height, walls, screen, gg_stop_l, \
-    gg_stop_r, npc, text2
-from TestStartScreen import screen_start
+from TestLvl import gg_sprite, gg_left, gg_right, all_sprites, walls, gg_stop_l, \
+    gg_stop_r, npc
+from TestClassCamera import Camera
+from TestStartScreen import screen_start, screen, width, height
 
+pygame.font.init()
 fps = 144
 clock = pygame.time.Clock()
 s = 2
+f2 = pygame.font.Font(None, 48)
+text2 = f2.render("Press F", False, pygame.Color("white"))
+camera = Camera()
 move_right = False
 move_left = False
 move_up = False
