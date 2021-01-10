@@ -1,5 +1,4 @@
 import pygame
-import time
 
 FPS = 60
 horizontal_border_size = 350
@@ -14,16 +13,22 @@ killer_sprites = pygame.sprite.Group()
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, speed):
+    image = pygame.image.load('data/swords.png')
+
+    def __init__(self, x, y, speed, font):
         super().__init__(player_sprite)
-        self.width = 25
-        self.height = 25
+        pygame.mixer.music.load('data/intro.mid')
+        pygame.mixer.music.play()
+        self.width = 30
+        self.height = 30
         self.speed = speed
         self.islive = True
-        self.image = pygame.Surface((self.width, self.width),
-                                    pygame.SRCALPHA, 32)
-        pygame.draw.rect(self.image, pygame.Color('blue'),
-                         (0, 0, self.width, self.width))
+        self.hp = 100
+        self.textsurface = font.render(str(self.hp), False, (255, 255, 255))
+        self.image = Player.image
+        self.image = pygame.transform.scale(self.image, (self.width, self.height))
+        #  self.image = pygame.Surface((self.width, self.width), pygame.SRCALPHA, 32)
+        #  pygame.draw.rect(self.image, pygame.Color('blue'), (0, 0, self.width, self.width))
         self.rect = pygame.Rect(x, y, self.width, self.width)
 
     def move(self, dx, dy):
@@ -39,11 +44,12 @@ class Player(pygame.sprite.Sprite):
             self.rect.x -= dx
             self.rect.y -= dy
 
-    def update(self):
+    def update(self, font):
         if not self.islive:
             return
         if pygame.sprite.spritecollideany(self, killer_sprites):
-            self.islive = False
+            self.hp -= 1
+            self.textsurface = font.render(str(self.hp), False, (255, 255, 255))
             return
 
 
@@ -67,19 +73,26 @@ class Killer(pygame.sprite.Sprite):
     def __init__(self, rect):
         super().__init__(killer_sprites)
         self.image = pygame.Surface((rect.w, rect.h), pygame.SRCALPHA, 32)
-        pygame.draw.rect(self.image, pygame.Color('white'),
+        pygame.draw.rect(self.image, pygame.Color('red'),
                          (0, 0, rect.w, rect.h))
+        self.seconds_of_life = 3
         self.rect = pygame.Rect(rect)
+
+    def update(self, dt):
+        self.seconds_of_life -= dt
+        if self.seconds_of_life <= 0:
+            killer_sprites.remove(self)
 
 
 class Blinking(pygame.sprite.Sprite):
     def __init__(self, x1, y1, w, h):
         super().__init__(blinking_sprites)
         self.current_time = pygame.time.get_ticks()
+        self.seconds_of_living = 1
         self.iswhite = True
         self.image = pygame.Surface((w, h), pygame.SRCALPHA, 32)
         self.count_of_blinking = 0
-        pygame.draw.rect(self.image, pygame.Color('white'),
+        pygame.draw.rect(self.image, pygame.Color('red'),
                          (0, 0, w, h))
         self.rect = pygame.Rect(x1, y1, w, h)
 
@@ -89,13 +102,12 @@ class Blinking(pygame.sprite.Sprite):
             Killer(self.rect)
         current_time = pygame.time.get_ticks()
 
-        # Время мигания
         delay = 150
 
         if current_time >= self.current_time + delay:
             self.iswhite = not self.iswhite
             if self.iswhite:
-                self.image.fill(pygame.Color('white'))
+                self.image.fill(pygame.Color('red'))
             else:
                 self.image.fill(pygame.Color('black'))
             self.current_time = current_time
@@ -106,7 +118,8 @@ def fighting():
     width, height = 1600, 900
     screen = pygame.display.set_mode((width, height))
 
-    #  attack = random.choice([0, 1, 2, 3, 4, 5])
+    gamefont = pygame.font.SysFont('Comic Sans MS', 30)
+
     border_left_x = (width / 2 - horizontal_border_size / 2) - 1
     border_top_y = (height / 2 + 50) - 1
     border_right_x = border_left_x + horizontal_border_size + 1
@@ -132,19 +145,31 @@ def fighting():
            border_right_x,
            border_bottom_y)
 
+    dt = 0
     clock = pygame.time.Clock()
     player = Player(border_right_x - horizontal_border_size / 2,
-                    border_bottom_y - vertical_border_size / 2, 300)
+                    border_bottom_y - vertical_border_size / 2, 300, gamefont)
     pressed_keys = {"left": False, "right": False, "up": False, "down": False}
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.mixer.music.stop()
                 return
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_0:
+                if event.key == pygame.K_1:
                     Blinking(border_left_x + 1, border_top_y + 1, 100, 350)
                     Blinking(border_right_x - 100, border_top_y + 1, 100, 350)
+
+                if event.key == pygame.K_2:
+                    Blinking(border_left_x + 1, border_top_y + 1, 350, 50)
+                    Blinking(border_left_x + 1, border_top_y + 151, 350, 50)
+                    Blinking(border_left_x + 1, border_bottom_y - 50, 350, 50)
+
+                if event.key == pygame.K_3:
+                    Blinking(border_left_x + 1, border_top_y + 1, 350, 300)
+                    Blinking(border_left_x + 1, border_top_y + 301, 300, 50)
+
                 if event.key == pygame.K_LEFT:
                     pressed_keys["left"] = True
                 if event.key == pygame.K_RIGHT:
@@ -174,14 +199,20 @@ def fighting():
             player.move(0, tomove)
 
         if not player.islive:
+            pygame.mixer.music.stop()
             return
         screen.fill(pygame.Color('black'))
         blinking_sprites.update()
-        player_sprite.update()
+        killer_sprites.update(dt)
+        player_sprite.update(gamefont)
+
         vertical_borders_sprites.draw(screen)
         horizontal_borders_sprites.draw(screen)
         blinking_sprites.draw(screen)
         killer_sprites.draw(screen)
         player_sprite.draw(screen)
-        clock.tick(FPS)
+
+        screen.blit(player.textsurface, (100, 0))
+
+        dt = clock.tick(FPS) / 1000
         pygame.display.flip()
