@@ -1,6 +1,7 @@
 import pygame
 
-FPS = 60
+width, height = 1600, 900
+
 horizontal_border_size = 350
 horizontal_borders_sprites = pygame.sprite.Group()
 
@@ -10,6 +11,17 @@ vertical_borders_sprites = pygame.sprite.Group()
 player_sprite = pygame.sprite.Group()
 blinking_sprites = pygame.sprite.Group()
 killer_sprites = pygame.sprite.Group()
+
+
+def teardown(soundObj):
+    soundObj.stop()
+    pygame.mixer.music.stop()
+
+    player_sprite.empty()
+    vertical_borders_sprites.empty()
+    horizontal_borders_sprites.empty()
+    blinking_sprites.empty()
+    killer_sprites.empty()
 
 
 class Player(pygame.sprite.Sprite):
@@ -48,9 +60,11 @@ class Player(pygame.sprite.Sprite):
         if not self.islive:
             return
         if pygame.sprite.spritecollideany(self, killer_sprites):
-            self.hp -= 1
-            self.textsurface = font.render(str(self.hp), False, (255, 255, 255))
-            return
+            self.hp -= 0.5
+            if self.hp < 0:
+                self.hp = 0
+                self.islive = False
+            self.textsurface = font.render(str(int(self.hp)), False, (255, 255, 255))
 
 
 class Border(pygame.sprite.Sprite):
@@ -115,10 +129,10 @@ class Blinking(pygame.sprite.Sprite):
             self.count_of_blinking += 1
 
 
-def fighting():
-    width, height = 1600, 900
+def internal_fighting():
     screen = pygame.display.set_mode((width, height))
 
+    FPS = 60
     soundObj = pygame.mixer.Sound('data/alarm.wav')
     gamefont = pygame.font.SysFont('Comic Sans MS', 30)
 
@@ -156,9 +170,8 @@ def fighting():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                soundObj.stop()
-                pygame.mixer.music.stop()
-                return
+                teardown(soundObj)
+                return True
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     soundObj.play()
@@ -205,9 +218,9 @@ def fighting():
             player.move(0, tomove)
 
         if not player.islive:
-            soundObj.stop()
-            pygame.mixer.music.stop()
-            return
+            teardown(soundObj)
+            return False
+
         screen.fill(pygame.Color('black'))
         blinking_sprites.update(soundObj)
         killer_sprites.update(dt)
@@ -223,3 +236,62 @@ def fighting():
 
         dt = clock.tick(FPS) / 1000
         pygame.display.flip()
+
+
+class Dead(pygame.sprite.Sprite):
+    image = pygame.image.load('data/dead.png')
+
+    def __init__(self, *group):
+        super().__init__(*group)
+        self.image = Dead.image
+        self.image = pygame.transform.scale(self.image, (width, height))
+        self.rect = self.image.get_rect()
+        print(self.rect)
+        self.x = -self.rect.width
+        self.rect.x = -self.rect.width
+        self.rect.y = 0
+        self.speed = 1200
+
+    def update(self, fps):
+        if self.x + self.rect.width >= width:
+            return
+        self.x += self.speed / fps
+        self.x = min(self.x, 0)
+        self.rect.x = self.x
+
+
+def dead():
+    all_sprites = pygame.sprite.Group()
+    vehicle = Dead(all_sprites)
+    screen = pygame.display.set_mode((width, height))
+
+    fps = 60
+    clock = pygame.time.Clock()
+    running = True
+    want_play = None
+
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                want_play = False
+                running = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                want_play = True
+                running = False
+
+        screen.fill(pygame.Color('black'))
+        all_sprites.draw(screen)
+        vehicle.update(fps)
+        clock.tick(fps)
+        pygame.display.flip()
+    return want_play
+
+
+def fighting():
+    while True:
+        finished = internal_fighting()
+        if finished:
+            break
+        want_play = dead()
+        if not want_play and want_play != None:
+            break

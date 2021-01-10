@@ -7,6 +7,5 @@ if __name__ == "__main__":
     pygame.init()
     pygame.font.init()
     fighting()
-    over()
     pygame.quit()
     sys.exit()
