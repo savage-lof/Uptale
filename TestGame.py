@@ -14,6 +14,7 @@ f2 = pygame.font.Font(None, 48)
 f3 = pygame.font.Font(None, 48)
 text2 = f2.render("Press N", False, pygame.Color("white"))
 text3 = f3.render("Press F", False, pygame.Color("white"))
+sprites_note = pygame.sprite.Group()
 camera = Camera()
 
 
@@ -24,9 +25,11 @@ def game():
     move_down = False
     move = False
     direction = 2
+    text1 = False
     f_press = False
     n_press = False
     running = True
+    scrolling = False
     while running:
         screen.fill(pygame.Color("black"))
         gg_stop_l.rect = gg_sprite.rect
@@ -76,11 +79,13 @@ def game():
 
             if event.type == pygame.KEYUP and event.key == pygame.K_f:
                 if f_press:
-                    scroll = Scroll(all_sprites, ['Во время игры вам будут попадаться записки',
-                                                  'В них будут вложены подказки по игре и',
-                                                  'сюжету.'])
+                    scroll = Scroll(sprites_note, ['Во время игры вам будут попадаться записки',
+                                                   'В них будут вложены подказки по игре и',
+                                                   'сюжету.'])
+                    sprites_note.add(scroll)
                     screen.blit(scroll.image, scroll.rect)
                     scroll.read()
+                    scrolling = True
 
         camera.update(gg_sprite, width, height)
         for sprite in all_sprites:
@@ -118,7 +123,9 @@ def game():
         all_sprites.draw(screen)
         all_sprites.update()
         clock.tick(150)
-        f_press = False
+        if text1:
+            sprites_note.draw(screen)
+            scroll.read()
         if pygame.sprite.collide_rect(gg_stop_l, npc):
             screen.blit(text2, (350, 600))
             n_press = True
