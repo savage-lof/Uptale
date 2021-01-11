@@ -6,7 +6,7 @@ from screen import screen, size, width, height
 
 sprites = pygame.sprite.Group()
 
-with open('lvl2.txt', mode="r", encoding="utf-8") as f:
+with open('lvl1.txt', mode="r", encoding="utf-8") as f:
     data = f.read().split('\n')
     for j in data:
         exec(j)
