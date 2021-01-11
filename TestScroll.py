@@ -1,12 +1,13 @@
 import pygame
 from TestLoadGame import load_image, all_sprites
 from screen import screen, width, height
+pygame.font.init()
 
 
 class Scroll(pygame.sprite.Sprite):
     image = load_image("scroll.png")
 
-    def __init__(self, sprites, words):
+    def __init__(self, sprites, *words):
         super().__init__(sprites)
         self.image = Scroll.image
         self.rect = self.image.get_rect(center=(width // 2, height // 2))
