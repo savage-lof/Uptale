@@ -58,11 +58,6 @@ def attack_6():
     Blinking(border_left_x + 1, border_bottom_y - 145, 350, 145)
 
 
-def attack_7():
-    Blinking(border_left_x + 1, border_top_y + 1, 350, 300)
-    Blinking(border_left_x + 1, border_top_y + 301, 300, 50)
-
-
 def teardown(soundObj):
     pygame.time.set_timer(MYEVENTTYPE, 0)
     soundObj.stop()
@@ -246,8 +241,7 @@ def internal_fighting():
     soundObj = pygame.mixer.Sound('data/alarm.wav')
     gamefont = pygame.font.SysFont('Comic Sans MS', 30)
 
-    attacks = [attack_6]
-    #  attacks = [attack_1, attack_2, attack_3, attack_4, attack_5, attack_6, attack_7]
+    attacks = [attack_1, attack_2, attack_3, attack_4, attack_5, attack_6]
 
     pygame.time.set_timer(MYEVENTTYPE, 3000)
 
@@ -293,7 +287,7 @@ def internal_fighting():
             elif event.type == MYEVENTTYPE:
                 soundObj.play()
                 if not attacks:
-                    attacks = [attack_1, attack_2, attack_3]
+                    attacks = [attack_1, attack_2, attack_3, attack_4, attack_5, attack_6]
                 attack = random.choice(attacks)
                 attack()
                 attacks.remove(attack)
