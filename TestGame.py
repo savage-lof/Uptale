@@ -2,7 +2,7 @@ import pygame
 from TestLvl import gg_sprite, gg_left, gg_right, all_sprites, walls, gg_stop_l, \
     gg_stop_r, npc, chest
 from TestClassCamera import Camera
-from TestScroll import Scroll
+from TestScroll import Scroll, Diolog
 from TestStartScreen import screen_start
 from screen import screen, width, height
 
@@ -19,7 +19,13 @@ camera = Camera()
 scroll = Scroll(sprites_note, ['Во время игры вам будут попадаться записки',
                                'В них будут вложены подказки по игре и',
                                'сюжету.'])
-sprites_note.add(scroll)
+
+scroll_npc = Diolog(sprites_note, ['Дарова странник!',
+                                   'Я призвал тебя!',
+                                   'Ты должен стать героем, а для этого',
+                                   ' иди вперёд и убей короля',
+                                   ' демооооонов'])
+sprites_note.remove(scroll, scroll_npc)
 
 
 def game():
@@ -27,8 +33,8 @@ def game():
     move_left = False
     move_up = False
     move_down = False
-    move = False
     text1 = False
+    text4 = False
     direction = 2
     f_press = False
     n_press = False
@@ -41,25 +47,20 @@ def game():
                 running = False
             if event.type == pygame.KEYDOWN and (event.key == pygame.K_LEFT or event.key == pygame.K_a):
                 move_left = True
-                move = True
                 direction = 1
                 gg_sprite.frames = gg_left.frames
             if event.type == pygame.KEYUP and (event.key == pygame.K_LEFT or event.key == pygame.K_a):
                 move_left = False
-                move = False
 
             if event.type == pygame.KEYDOWN and (event.key == pygame.K_RIGHT or event.key == pygame.K_d):
                 move_right = True
-                move = True
                 direction = 2
                 gg_sprite.frames = gg_right.frames
             if event.type == pygame.KEYUP and (event.key == pygame.K_RIGHT or event.key == pygame.K_d):
                 move_right = False
-                move = False
 
             if event.type == pygame.KEYDOWN and (event.key == pygame.K_UP or event.key == pygame.K_w):
                 move_up = True
-                move = True
                 if direction == 1:
                     gg_sprite.frames = gg_left.frames
                 elif direction == 2:
@@ -78,13 +79,20 @@ def game():
 
             if event.type == pygame.KEYUP and event.key == pygame.K_n:
                 if n_press:
-                    screen_start()
+                    if not text4:
+                        sprites_note.add(scroll_npc)
+                        text4 = True
+                    else:
+                        sprites_note.remove(scroll_npc)
+                        text4 = False
 
             if event.type == pygame.KEYUP and event.key == pygame.K_f:
                 if f_press:
                     if not text1:
+                        sprites_note.add(scroll)
                         text1 = True
                     else:
+                        sprites_note.remove(scroll)
                         text1 = False
 
         camera.update(gg_sprite, width, height)
@@ -133,6 +141,9 @@ def game():
         if text1:
             sprites_note.draw(screen)
             scroll.read()
+        if text4:
+            sprites_note.draw(screen)
+            scroll_npc.read()
         pygame.display.update()
         pygame.display.flip()
 
