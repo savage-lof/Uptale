@@ -2,8 +2,9 @@ import pygame
 from TestLoadGame import load_image, all_sprites
 
 
-class Tile(pygame.sprite.Sprite):
 
+
+class Tile(pygame.sprite.Sprite):
     def __init__(self, filename, center, type_is):
         image = load_image(filename, -1)
         super().__init__(all_sprites)
