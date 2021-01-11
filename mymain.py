@@ -1,6 +1,5 @@
 import pygame
 from fighting import fighting
-from gameover import over
 import sys
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 import pygame
+import random
 
 width, height = 1600, 900
 
@@ -8,12 +9,36 @@ horizontal_borders_sprites = pygame.sprite.Group()
 vertical_border_size = 350
 vertical_borders_sprites = pygame.sprite.Group()
 
+border_left_x = (width / 2 - horizontal_border_size / 2) - 1
+border_top_y = (height / 2 + 50) - 1
+border_right_x = border_left_x + horizontal_border_size + 1
+border_bottom_y = border_top_y + vertical_border_size + 1
+
 player_sprite = pygame.sprite.Group()
 blinking_sprites = pygame.sprite.Group()
 killer_sprites = pygame.sprite.Group()
+animated_sprites = pygame.sprite.Group()
+hud_sprites = pygame.sprite.Group()
+
+MYEVENTTYPE = pygame.USEREVENT + 1
+
+
+def attack_1():
+    Blinking(border_left_x + 1, border_top_y + 1, 100, 350)
+    Blinking(border_right_x - 100, border_top_y + 1, 100, 350)
+
+def attack_2():
+    Blinking(border_left_x + 1, border_top_y + 1, 350, 50)
+    Blinking(border_left_x + 1, border_top_y + 151, 350, 50)
+    Blinking(border_left_x + 1, border_bottom_y - 50, 350, 50)
+
+def attack_3():
+    Blinking(border_left_x + 1, border_top_y + 1, 350, 300)
+    Blinking(border_left_x + 1, border_top_y + 301, 300, 50)
 
 
 def teardown(soundObj):
+    pygame.time.set_timer(MYEVENTTYPE, 0)
     soundObj.stop()
     pygame.mixer.music.stop()
 
@@ -65,6 +90,15 @@ class Player(pygame.sprite.Sprite):
                 self.hp = 0
                 self.islive = False
             self.textsurface = font.render(str(int(self.hp)), False, (255, 255, 255))
+
+
+class HealthBar(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__(hud_sprites)
+        self.image = pygame.Surface((200, 40))
+        pygame.draw.rect(self.image, pygame.Color('green'),
+                         (0, 0, 200, 40))
+        self.rect = pygame.Rect(50, 50, 200, 40)
 
 
 class Border(pygame.sprite.Sprite):
@@ -129,6 +163,33 @@ class Blinking(pygame.sprite.Sprite):
             self.count_of_blinking += 1
 
 
+class AnimatedSprite(pygame.sprite.Sprite):
+    def __init__(self, sheet, columns, rows, x, y):
+        super().__init__(animated_sprites)
+        self.frames = []
+        self.cut_sheet(sheet, columns, rows)
+        self.cur_frame = 0
+        self.cur_time = 0
+        self.image = self.frames[self.cur_frame]
+        self.rect = self.rect.move(x, y)
+
+    def cut_sheet(self, sheet, columns, rows):
+        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
+                                sheet.get_height() // rows)
+        for j in range(rows):
+            for i in range(columns):
+                frame_location = (self.rect.w * i, self.rect.h * j)
+                self.frames.append(sheet.subsurface(pygame.Rect(
+                    frame_location, self.rect.size)))
+
+    def update(self, dt):
+        self.cur_time += dt
+        if self.cur_time > 0.1:
+            self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+            self.image = self.frames[self.cur_frame]
+            self.cur_time -= 0.1
+
+
 def internal_fighting():
     screen = pygame.display.set_mode((width, height))
 
@@ -136,10 +197,9 @@ def internal_fighting():
     soundObj = pygame.mixer.Sound('data/alarm.wav')
     gamefont = pygame.font.SysFont('Comic Sans MS', 30)
 
-    border_left_x = (width / 2 - horizontal_border_size / 2) - 1
-    border_top_y = (height / 2 + 50) - 1
-    border_right_x = border_left_x + horizontal_border_size + 1
-    border_bottom_y = border_top_y + vertical_border_size + 1
+    attacks = [attack_1, attack_2, attack_3]
+
+    pygame.time.set_timer(MYEVENTTYPE, 3000)
 
     Border(border_left_x,
            border_top_y,
@@ -163,6 +223,7 @@ def internal_fighting():
 
     dt = 0
     clock = pygame.time.Clock()
+    enemy = AnimatedSprite(pygame.image.load('data/npc.png'), 11, 1, 150, 50)
     player = Player(border_right_x - horizontal_border_size / 2,
                     border_bottom_y - vertical_border_size / 2, 300, gamefont)
     pressed_keys = {"left": False, "right": False, "up": False, "down": False}
@@ -172,23 +233,16 @@ def internal_fighting():
             if event.type == pygame.QUIT:
                 teardown(soundObj)
                 return True
+            elif event.type == MYEVENTTYPE:
+                soundObj.play()
+                if not attacks:
+                    attacks = [attack_1, attack_2, attack_3]
+                attack = random.choice(attacks)
+                attack()
+                attacks.remove(attack)
+                pygame.time.set_timer(MYEVENTTYPE, random.randint(5000, 7000))
+
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_1:
-                    soundObj.play()
-                    Blinking(border_left_x + 1, border_top_y + 1, 100, 350)
-                    Blinking(border_right_x - 100, border_top_y + 1, 100, 350)
-
-                if event.key == pygame.K_2:
-                    soundObj.play()
-                    Blinking(border_left_x + 1, border_top_y + 1, 350, 50)
-                    Blinking(border_left_x + 1, border_top_y + 151, 350, 50)
-                    Blinking(border_left_x + 1, border_bottom_y - 50, 350, 50)
-
-                if event.key == pygame.K_3:
-                    soundObj.play()
-                    Blinking(border_left_x + 1, border_top_y + 1, 350, 300)
-                    Blinking(border_left_x + 1, border_top_y + 301, 300, 50)
-
                 if event.key == pygame.K_LEFT:
                     pressed_keys["left"] = True
                 if event.key == pygame.K_RIGHT:
@@ -224,12 +278,15 @@ def internal_fighting():
         screen.fill(pygame.Color('black'))
         blinking_sprites.update(soundObj)
         killer_sprites.update(dt)
+        animated_sprites.update(dt)
         player_sprite.update(gamefont)
 
         vertical_borders_sprites.draw(screen)
         horizontal_borders_sprites.draw(screen)
         blinking_sprites.draw(screen)
         killer_sprites.draw(screen)
+        animated_sprites.draw(screen)
+        hud_sprites.draw(screen)
         player_sprite.draw(screen)
 
         screen.blit(player.textsurface, (100, 0))
@@ -293,5 +350,5 @@ def fighting():
         if finished:
             break
         want_play = dead()
-        if not want_play and want_play != None:
+        if not want_play and want_play is not None:
             break
