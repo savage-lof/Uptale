@@ -1,7 +1,6 @@
 import pygame
 from TestLoadGame import load_image, all_sprites
-size = width, height = 800, 800
-screen = pygame.display.set_mode(size)
+from screen import screen, width, height
 
 
 class Scroll(pygame.sprite.Sprite):

@@ -1,6 +1,6 @@
 import pygame
 from TestLoadGame import load_image
-width, height = 800, 800
+from screen import width, height
 
 
 class GameScreen(pygame.sprite.Sprite):

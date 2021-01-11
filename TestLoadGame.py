@@ -1,10 +1,9 @@
 import pygame
 import os
 import sys
+from screen import screen, size, width, height
 
 all_sprites = pygame.sprite.Group()
-size = width, height = 800, 800
-screen = pygame.display.set_mode(size)
 
 
 def load_image(name, colorkey=None):

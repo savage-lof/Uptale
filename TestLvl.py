@@ -2,7 +2,7 @@ import pygame
 from TestClassTile import Tile, Tile_player
 from TestLoadGame import all_sprites, load_image
 from TestAnimation import AnimatedSprite
-from TestStartScreen import screen, width, height
+from screen import screen, size, width, height
 
 sprites = pygame.sprite.Group()
 lvl = ['lvl1.txt']

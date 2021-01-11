@@ -2,10 +2,9 @@ import pygame
 import time
 from TestLoadGame import load_image
 from TestGame import game
+from screen import screen
 
 pygame.init()
-size = width, height = 800, 800
-screen = pygame.display.set_mode(size)
 
 
 def start():

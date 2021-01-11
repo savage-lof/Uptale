@@ -3,7 +3,8 @@ from TestLvl import gg_sprite, gg_left, gg_right, all_sprites, walls, gg_stop_l,
     gg_stop_r, npc, chest
 from TestClassCamera import Camera
 from TestScroll import Scroll
-from TestStartScreen import screen_start, screen, width, height
+from TestStartScreen import screen_start
+from screen import screen, width, height
 
 pygame.font.init()
 fps = 144
