@@ -54,7 +54,8 @@ def lvl1(rect):
              'сюжету. После прочтения записок вы попадете',
              'на следующий уровень']
     game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
-         npc, words, gg_rect=gg_sprite.rect, lvl='txt1.txt')
+         npc, gg_rect=gg_sprite.rect, lvl='txt1.txt')
+
 
 def lvl2(rect):
     walls = list()
@@ -73,7 +74,7 @@ def lvl2(rect):
     gg_stop_l = AnimatedSprite(load_image("left_player_stop.png"), 1, 1, rect[0], rect[1], sprites, 15)
     words = ['Будте готовы встретить ']
     game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
-         npc, words, gg_rect=gg_sprite.rect, lvl='txt2.txt')
+         npc, gg_rect=gg_sprite.rect, lvl='txt2.txt')
 
 
 def lvl3(rect):
@@ -92,7 +93,8 @@ def lvl3(rect):
     gg_stop_r = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, 850, 450, sprites, 15)
     gg_stop_l = AnimatedSprite(load_image("left_player_stop.png"), 1, 1, 850, 450, sprites, 15)
     game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
-         npc, words, gg_rect=gg_sprite.rect, lvl='txt2.txt')
+         npc, gg_rect=gg_sprite.rect, lvl='txt2.txt')
+
 
 def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
          npc, gg_rect=None, lvl=None):
@@ -152,7 +154,7 @@ def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l
                     else:
                         sprites_note.remove(scroll_npc)
                         text4 = False
-
+                        return
             if event.type == pygame.KEYUP and event.key == pygame.K_f:
                 if f_press:
                     if not text1:
@@ -161,7 +163,8 @@ def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l
                     else:
                         sprites_note.remove(scroll)
                         text1 = False
-                        return
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                screen_start()
 
         camera.update(gg_sprite, width, height)
         for sprite in all_sprites:
@@ -218,7 +221,7 @@ def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l
     pygame.quit()
 
 
-def main(file='lvl3.txt', rect=None):
+def main(file='lvl1.txt', rect=None):
     if file == 'lvl1.txt':
         lvl1(rect=(850, 450))
         file = 'lvl2.txt'
@@ -235,4 +238,3 @@ def clean():
     all_sprites.empty()
     sprites.empty()
     sprites_note.empty()
-

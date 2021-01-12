@@ -4,7 +4,7 @@ from screen import width, height
 
 
 class GameScreen(pygame.sprite.Sprite):
-    image = load_image("newy.png")
+    image = load_image("pause.png")
 
     def __init__(self, *group):
         super().__init__(*group)
