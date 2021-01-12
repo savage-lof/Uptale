@@ -7,6 +7,7 @@ from TestLoadGame import load_image, all_sprites
 from TestScroll import Scroll, Diolog
 from TestStartScreen import screen_start
 from screen import screen, width, height
+from fighting import fighting
 
 pygame.font.init()
 sprites_note = pygame.sprite.Group()
@@ -16,19 +17,26 @@ clock = pygame.time.Clock()
 s = 2
 f2 = pygame.font.Font(None, 48)
 f3 = pygame.font.Font(None, 48)
+f4 = pygame.font.Font(None, 48)
 text2 = f2.render("Press N", False, pygame.Color("white"))
 text3 = f3.render("Press F", False, pygame.Color("white"))
+text5 = f4.render("Press E", False, pygame.Color("white"))
 camera = Camera()
 scroll = Scroll(sprites_note, ['Во время игры вам будут попадаться записки',
                                'В них будут вложены подказки по игре и',
                                'сюжету.'])
+scroll2 = Scroll(sprites_note, ['Привет',
+                                'Пока.'])
 
 scroll_npc = Diolog(sprites_note, ['Дарова странник!',
                                    'Я призвал тебя!',
                                    'Ты должен стать героем, а для этого',
                                    ' иди вперёд и убей короля',
                                    ' демооооонов'])
-sprites_note.remove(scroll, scroll_npc)
+scroll_npc2 = Diolog(sprites_note, ['Дарова ещё раз странник!',
+                                    'Тебе прямо по коридору'])
+
+sprites_note.remove(scroll, scroll2, scroll_npc, scroll_npc2)
 
 
 def lvl1(rect):
@@ -84,8 +92,8 @@ def lvl3(rect):
     walls.append(Tile('side_wall.png', (850 - 468, 450 - 68), 'wall'))
     walls.append(Tile('side_wall.png', (850 + 468, 450 - 68), 'wall'))
     floor = Tile('floorLvl1.png', (850, 450), 'floor')
-    npc = AnimatedSprite(load_image("npc.png"), 11, 1, 750, 100, all_sprites, 25)
-    walls.append(npc)
+    npc_boss = AnimatedSprite(load_image("npc.png"), 11, 1, 750, 100, all_sprites, 25)
+    walls.append(npc_boss)
     chest = Tile('chest.png', (350, 325), 'wall')
     gg_right = AnimatedSprite(load_image("right_player.png"), 8, 1, 850, 450, sprites, 15)
     gg_left = AnimatedSprite(load_image("left_player.png"), 8, 1, 850, 450, sprites, 15)
@@ -93,7 +101,7 @@ def lvl3(rect):
     gg_stop_r = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, 850, 450, sprites, 15)
     gg_stop_l = AnimatedSprite(load_image("left_player_stop.png"), 1, 1, 850, 450, sprites, 15)
     game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
-         npc, gg_rect=gg_sprite.rect, lvl='txt2.txt')
+         npc_boss, gg_rect=gg_sprite.rect, lvl='txt3.txt')
 
 
 def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
@@ -104,7 +112,10 @@ def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l
     move_down = False
     text1 = False
     text4 = False
+    text11 = False
+    text21 = False
     direction = 2
+    enter_press = False
     f_press = False
     n_press = False
     running = True
@@ -148,28 +159,48 @@ def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l
 
             if event.type == pygame.KEYUP and event.key == pygame.K_n:
                 if n_press:
-                    if not text4:
-                        sprites_note.add(scroll_npc)
-                        text4 = True
+                    if lvl == 'txt1.txt':
+                        if not text4:
+                            sprites_note.add(scroll_npc)
+                            text4 = True
+                        else:
+                            sprites_note.remove(scroll_npc)
+                            text4 = False
+                            return
                     else:
-                        sprites_note.remove(scroll_npc)
-                        text4 = False
-                        return
+                        if not text21:
+                            sprites_note.add(scroll_npc2)
+                            text21 = True
+                        else:
+                            sprites_note.remove(scroll_npc2)
+                            text21 = False
+                            return
             if event.type == pygame.KEYUP and event.key == pygame.K_f:
                 if f_press:
-                    if not text1:
-                        sprites_note.add(scroll)
-                        text1 = True
+                    if lvl == 'txt1.txt':
+                        if not text1:
+                            sprites_note.add(scroll)
+                            text1 = True
+                        else:
+                            sprites_note.remove(scroll)
+                            text1 = False
                     else:
-                        sprites_note.remove(scroll)
-                        text1 = False
+                        if not text11:
+                            sprites_note.add(scroll2)
+                            text11 = True
+                        else:
+                            sprites_note.remove(scroll2)
+                            text11 = False
+            if event.type == pygame.KEYUP and event.key == pygame.K_e:
+                if enter_press:
+                    fighting()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 screen_start()
 
         camera.update(gg_sprite, width, height)
         for sprite in all_sprites:
             camera.apply(sprite)
-        if not text1:
+        if not text1 and not text11 and not text4 and not text21:
             if move_left:
                 gg_sprite.rect.x -= s
 
@@ -203,15 +234,26 @@ def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l
         all_sprites.update()
         clock.tick(150)
         f_press = False
-        if pygame.sprite.collide_rect(gg_stop_l, npc):
-            screen.blit(text2, (350, 600))
-            n_press = True
+        if lvl != 'txt3.txt':
+            if pygame.sprite.collide_rect(gg_stop_l, npc):
+                screen.blit(text2, (350, 600))
+                n_press = True
+        if lvl == 'txt3.txt':
+            if pygame.sprite.collide_rect(gg_stop_l, npc):
+                screen.blit(text5, (350, 600))
+                enter_press = True
         if pygame.sprite.collide_rect(gg_stop_l, chest):
             screen.blit(text3, (350, 600))
             f_press = True
         if text1:
             sprites_note.draw(screen)
             scroll.read()
+        if text11:
+            sprites_note.draw(screen)
+            scroll2.read()
+        if text21:
+            sprites_note.draw(screen)
+            scroll_npc2.read()
         if text4:
             sprites_note.draw(screen)
             scroll_npc.read()

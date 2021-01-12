@@ -1,6 +1,6 @@
 import pygame
 import sys
-from TestStartSceenClass import GameScreen
+from TestStartSceenClass import GameScreen, GameScreenWin
 from screen import screen
 
 
@@ -20,10 +20,40 @@ def screen_start():
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pos()[0] in range(125, 690) and pygame.mouse.get_pos()[1] in range(360, 425):
-                        f = open('save.txt', 'w')
-                        a = 'adaasdafqwf'
-                        f.write(a)
-                        f.close()
+                    f = open('save.txt', 'w')
+                    a = 'Сэйв сделаем к пятнице ;)'
+                    f.write(a)
+                    f.close()
+                if pygame.mouse.get_pos()[0] in range(95, 706) and pygame.mouse.get_pos()[1] in range(507, 568):
+                    running = False
+                if pygame.mouse.get_pos()[0] in range(255, 550) and pygame.mouse.get_pos()[1] in range(642, 693):
+                    pygame.quit()
+                    sys.exit()
+
+        all_sprites.draw(screen)
+        vehicle.update(fps)
+        clock.tick(fps)
+        pygame.display.flip()
+
+
+def win():
+    all_sprites = pygame.sprite.Group()
+    vehicle = GameScreenWin(all_sprites)
+
+    fps = 60
+    clock = pygame.time.Clock()
+    running = True
+
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pos()[0] in range(125, 690) and pygame.mouse.get_pos()[1] in range(360, 425):
+                    f = open('save.txt', 'w')
+                    a = str()
+                    f.write(a)
+                    f.close()
                 if pygame.mouse.get_pos()[0] in range(95, 706) and pygame.mouse.get_pos()[1] in range(507, 568):
                     running = False
                 if pygame.mouse.get_pos()[0] in range(255, 550) and pygame.mouse.get_pos()[1] in range(642, 693):
