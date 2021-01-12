@@ -54,7 +54,7 @@ def lvl1(rect):
              'сюжету. После прочтения записок вы попадете',
              'на следующий уровень']
     game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
-         npc, gg_rect=gg_sprite.rect, lvl='txt1.txt')
+         npc, words, gg_rect=gg_sprite.rect, lvl='txt1.txt')
 
 def lvl2(rect):
     walls = list()
@@ -71,9 +71,28 @@ def lvl2(rect):
     gg_sprite = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, rect[0], rect[1], all_sprites, 15)
     gg_stop_r = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, rect[0], rect[1], sprites, 15)
     gg_stop_l = AnimatedSprite(load_image("left_player_stop.png"), 1, 1, rect[0], rect[1], sprites, 15)
+    words = ['Будте готовы встретить ']
     game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
-         npc, gg_rect=gg_sprite.rect, lvl='txt2.txt')
+         npc, words, gg_rect=gg_sprite.rect, lvl='txt2.txt')
 
+
+def lvl3(rect):
+    walls = list()
+    walls.append(Tile('up_wall_lvl1.png', (850, 450 - 378), 'wall'))
+    walls.append(Tile('dawn_wall_lvl1.png', (850, 450 + 310), 'wall'))
+    walls.append(Tile('side_wall.png', (850 - 468, 450 - 68), 'wall'))
+    walls.append(Tile('side_wall.png', (850 + 468, 450 - 68), 'wall'))
+    floor = Tile('floorLvl1.png', (850, 450), 'floor')
+    npc = AnimatedSprite(load_image("npc.png"), 11, 1, 750, 100, all_sprites, 25)
+    walls.append(npc)
+    chest = Tile('chest.png', (350, 325), 'wall')
+    gg_right = AnimatedSprite(load_image("right_player.png"), 8, 1, 850, 450, sprites, 15)
+    gg_left = AnimatedSprite(load_image("left_player.png"), 8, 1, 850, 450, sprites, 15)
+    gg_sprite = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, 850, 450, all_sprites, 15)
+    gg_stop_r = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, 850, 450, sprites, 15)
+    gg_stop_l = AnimatedSprite(load_image("left_player_stop.png"), 1, 1, 850, 450, sprites, 15)
+    game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
+         npc, words, gg_rect=gg_sprite.rect, lvl='txt2.txt')
 
 def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
          npc, gg_rect=None, lvl=None):
@@ -199,17 +218,17 @@ def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l
     pygame.quit()
 
 
-def main(file='lvl1.txt', rect=None):
+def main(file='lvl3.txt', rect=None):
     if file == 'lvl1.txt':
         lvl1(rect=(850, 450))
         file = 'lvl2.txt'
         clean()
     if file == 'lvl2.txt':
-        lvl1(rect=(350, 450))
+        lvl2(rect=(350, 450))
         file = 'lvl3.txt'
         clean()
     if file == 'lvl3.txt':
-        lvl1(rect)
+        lvl3(rect)
 
 
 def clean():
