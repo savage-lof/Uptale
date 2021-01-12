@@ -1,7 +1,7 @@
 import pygame
 import time
 from TestLoadGame import load_image
-from TestGame import game
+from TestGame import game, main
 from screen import screen
 
 pygame.init()
@@ -25,7 +25,7 @@ def start():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pos()[0] >= 80 and pygame.mouse.get_pos()[1] >= 285:
                     if pygame.mouse.get_pos()[0] <= 515 and pygame.mouse.get_pos()[1] <= 370:
-                        game()
+                        main()
                 if pygame.mouse.get_pos()[0] >= 80 and pygame.mouse.get_pos()[1] >= 441:
                     if pygame.mouse.get_pos()[0] <= 565 and pygame.mouse.get_pos()[1] <= 515:
                         pass

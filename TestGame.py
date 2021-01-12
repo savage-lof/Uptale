@@ -1,13 +1,16 @@
 import pygame
-from TestLvl import gg_sprite, gg_left, gg_right, all_sprites, walls, gg_stop_l, \
-    gg_stop_r, npc, chest
+
+from TestAnimation import AnimatedSprite
 from TestClassCamera import Camera
+from TestClassTile import Tile
+from TestLoadGame import load_image, all_sprites
 from TestScroll import Scroll, Diolog
 from TestStartScreen import screen_start
 from screen import screen, width, height
 
 pygame.font.init()
 sprites_note = pygame.sprite.Group()
+sprites = pygame.sprite.Group()
 fps = 144
 clock = pygame.time.Clock()
 s = 2
@@ -28,7 +31,52 @@ scroll_npc = Diolog(sprites_note, ['Дарова странник!',
 sprites_note.remove(scroll, scroll_npc)
 
 
-def game():
+def lvl1(rect):
+    walls = list()
+    walls.append(Tile('up_wall_new.png', (850, 450 - 378), 'wall'))
+    walls.append(Tile('dawn_wall.png', (850, 450 + 310), 'wall'))
+    walls.append(Tile('side_wall.png', (850 - 240, 450 - 68), 'wall'))
+    walls.append(Tile('side_wall.png', (850 + 240, 450 - 68), 'wall'))
+    floor = Tile('floor.png', (850, 450), 'floor')
+    floor = Tile('floor_new.png', (850, 450), 'floor')
+    npc = AnimatedSprite(load_image("npc_mir.png"), 3, 1, 735, 105, all_sprites, 35)
+    walls.append(npc)
+    gerl = AnimatedSprite(load_image("gerl.png"), 1, 7, 600, 50, all_sprites, 15)
+    walls.append(AnimatedSprite(load_image('el.png'), 9, 1, 850 - 51, 20, all_sprites, 35))
+    chest = Tile('chest.png', (1000, 150), 'floor')
+    gg_right = AnimatedSprite(load_image("right_player.png"), 8, 1, rect[0], rect[1], sprites, 15)
+    gg_left = AnimatedSprite(load_image("left_player.png"), 8, 1, rect[0], rect[1], sprites, 15)
+    gg_sprite = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, rect[0], rect[1], all_sprites, 15)
+    gg_stop_r = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, rect[0], rect[1], sprites, 15)
+    gg_stop_l = AnimatedSprite(load_image("left_player_stop.png"), 1, 1, rect[0], rect[1], sprites, 15)
+    words = ['Во время игры вам будут попадаться записки',
+             'В них будут вложены подказки по игре и',
+             'сюжету. После прочтения записок вы попадете',
+             'на следующий уровень']
+    game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
+         npc, gg_rect=gg_sprite.rect, lvl='txt1.txt')
+
+def lvl2(rect):
+    walls = list()
+    walls.append(Tile('up_wall_lvl2.png', (850, 450 - 226), 'wall'))
+    walls.append(Tile('dawn_wall_lvl2.png', (850, 450 + 160), 'wall'))
+    walls.append(Tile('side_wall_Lvl2.png', (850 - 695, 450 - 66), 'wall'))
+    walls.append(Tile('side_wall_Lvl2.png', (850 + 695, 450 - 66), 'wall'))
+    floor = Tile('floorLvl2.png', (850, 450), 'floor')
+    npc = AnimatedSprite(load_image("npc_mir.png"), 3, 1, 750, 500, all_sprites, 30)
+    walls.append(npc)
+    chest = Tile('chest.png', (350, 325), 'wall')
+    gg_right = AnimatedSprite(load_image("right_player.png"), 8, 1, rect[0], rect[1], sprites, 15)
+    gg_left = AnimatedSprite(load_image("left_player.png"), 8, 1, rect[0], rect[1], sprites, 15)
+    gg_sprite = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, rect[0], rect[1], all_sprites, 15)
+    gg_stop_r = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, rect[0], rect[1], sprites, 15)
+    gg_stop_l = AnimatedSprite(load_image("left_player_stop.png"), 1, 1, rect[0], rect[1], sprites, 15)
+    game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
+         npc, gg_rect=gg_sprite.rect, lvl='txt2.txt')
+
+
+def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
+         npc, gg_rect=None, lvl=None):
     move_right = False
     move_left = False
     move_up = False
@@ -94,6 +142,7 @@ def game():
                     else:
                         sprites_note.remove(scroll)
                         text1 = False
+                        return
 
         camera.update(gg_sprite, width, height)
         for sprite in all_sprites:
@@ -148,3 +197,23 @@ def game():
         pygame.display.flip()
 
     pygame.quit()
+
+
+def main(file='lvl1.txt', rect=None):
+    if file == 'lvl1.txt':
+        lvl1(rect=(850, 450))
+        file = 'lvl2.txt'
+        clean()
+    if file == 'lvl2.txt':
+        lvl1(rect=(350, 450))
+        file = 'lvl3.txt'
+        clean()
+    if file == 'lvl3.txt':
+        lvl1(rect)
+
+
+def clean():
+    all_sprites.empty()
+    sprites.empty()
+    sprites_note.empty()
+
