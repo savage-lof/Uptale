@@ -76,7 +76,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, speed, font):
         super().__init__(player_sprite)
         pygame.mixer.music.load('data/intro.mid')
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(-1)
         self.width = 30
         self.height = 30
         self.speed = speed
