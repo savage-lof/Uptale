@@ -85,8 +85,6 @@ class Player(pygame.sprite.Sprite):
         self.textsurface = font.render(str(self.hp), False, (255, 255, 255))
         self.image = Player.image
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
-        #  self.image = pygame.Surface((self.width, self.width), pygame.SRCALPHA, 32)
-        #  pygame.draw.rect(self.image, pygame.Color('blue'), (0, 0, self.width, self.width))
         self.rect = pygame.Rect(x, y, self.width, self.width)
 
     def move(self, dx, dy):
@@ -239,6 +237,7 @@ def internal_fighting():
 
     FPS = 60
     soundObj = pygame.mixer.Sound('data/alarm.wav')
+    soundObj.set_volume(0.1)
     gamefont = pygame.font.SysFont('Comic Sans MS', 30)
 
     attacks = [attack_1, attack_2, attack_3, attack_4, attack_5, attack_6]
