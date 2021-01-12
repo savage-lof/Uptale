@@ -82,7 +82,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = speed
         self.islive = True
         self.hp = 100
-        self.textsurface = font.render(str(self.hp), False, (255, 255, 255))
+        self.textsurface = font.render(f'hp: {self.hp}', False, (255, 255, 255))
         self.image = Player.image
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
         self.rect = pygame.Rect(x, y, self.width, self.width)
@@ -223,13 +223,15 @@ class TimerOfGame(pygame.sprite.Sprite):
         super().__init__(timer_sprites)
         self.cur_time = 61
         self.font = font
-        self.textsurface = self.font.render(str(int(self.cur_time)), False, (255, 255, 255))
+        self.textsurface = self.font.render(f'Оставшееся время: {int(self.cur_time)}', False,
+                                            (255, 255, 255))
 
     def update(self, dt):
         self.cur_time -= dt
         if self.cur_time < 0:
             self.cur_time = 0
-        self.textsurface = self.font.render(str(int(self.cur_time)), False, (255, 255, 255))
+        self.textsurface = self.font.render(f'Оставшееся время: {int(self.cur_time)}', False,
+                                            (255, 255, 255))
 
 
 def internal_fighting():
@@ -349,7 +351,7 @@ def internal_fighting():
         player_sprite.draw(screen)
 
         screen.blit(player.textsurface, (100, 0))
-        screen.blit(gt.textsurface, (1300, 0))
+        screen.blit(gt.textsurface, (1200, 0))
 
         dt = clock.tick(FPS) / 1000
         pygame.display.flip()
