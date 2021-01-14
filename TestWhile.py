@@ -3,8 +3,14 @@ import time
 from TestLoadGame import load_image
 from TestGame import game, main
 from screen import screen
+import sqlite3
 
 pygame.init()
+con = sqlite3.connect("uptale.db")
+cur = con.cursor()
+result = cur.execute("""SELECT * FROM save ORDER BY ID DESC LIMIT 1""").fetchone()
+rect = (result[1], result[2])
+file = result[3]
 
 
 def start():
@@ -28,7 +34,8 @@ def start():
                         main()
                 if pygame.mouse.get_pos()[0] >= 80 and pygame.mouse.get_pos()[1] >= 441:
                     if pygame.mouse.get_pos()[0] <= 565 and pygame.mouse.get_pos()[1] <= 515:
-                        pass
+                        print(result)
+                        main(file, rect)
                 if pygame.mouse.get_pos()[0] >= 80 and pygame.mouse.get_pos()[1] >= 614:
                     if pygame.mouse.get_pos()[0] <= 330 and pygame.mouse.get_pos()[1] <= 685:
                         running = False
