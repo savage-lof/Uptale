@@ -8,6 +8,7 @@ from TestScroll import Scroll, Diolog
 from TestStartScreen import screen_start
 from screen import screen, width, height
 from fighting import fighting
+from save import cur, con
 
 pygame.font.init()
 sprites_note = pygame.sprite.Group()
@@ -39,73 +40,80 @@ scroll_npc2 = Diolog(sprites_note, ['Дарова ещё раз странник
 sprites_note.remove(scroll, scroll2, scroll_npc, scroll_npc2)
 
 
-def lvl1(rect):
+def lvl1(lvl='lvl1', wall_1_x=850, wall_1_y=72, wall_2_x=850, wall_2_y=760, wall_3_x=610,
+         wall_3_y=382, wall_4_x=1090, wall_4_y=382, floor_x=850, floor_y=450, npc_x=735, npc_y=105,
+         chest_x=735, chest_y=105, gg_left_x=850, gg_left_y=450, gg_sprite_x=850, gg_sprite_y=450,
+         gerl_x=600, gerl_y=50, el_x=799, el_y=20, npc_boss_x=None, npc_boss_y=None):
     walls = list()
-    walls.append(Tile('up_wall_new.png', (850, 450 - 378), 'wall'))
-    walls.append(Tile('dawn_wall.png', (850, 450 + 310), 'wall'))
-    walls.append(Tile('side_wall.png', (850 - 240, 450 - 68), 'wall'))
-    walls.append(Tile('side_wall.png', (850 + 240, 450 - 68), 'wall'))
-    floor = Tile('floor.png', (850, 450), 'floor')
-    floor = Tile('floor_new.png', (850, 450), 'floor')
-    npc = AnimatedSprite(load_image("npc_mir.png"), 3, 1, 735, 105, all_sprites, 35)
+    wall_1 = Tile('up_wall_new.png', (wall_1_x, wall_1_y), 'wall')
+    wall_2 = Tile('dawn_wall.png', (wall_2_x, wall_2_y), 'wall')
+    wall_3 = Tile('side_wall.png', (wall_3_x, wall_3_y), 'wall')
+    wall_4 = Tile('side_wall.png', (wall_4_x, wall_4_y), 'wall')
+    walls.extend([wall_1, wall_2, wall_3, wall_4])
+    floor = Tile('floor_new.png', (floor_x, floor_y), 'floor')
+    npc = AnimatedSprite(load_image("npc_mir.png"), 3, 1, npc_x, npc_y, all_sprites, 35)
     walls.append(npc)
-    gerl = AnimatedSprite(load_image("gerl.png"), 1, 7, 600, 50, all_sprites, 15)
-    walls.append(AnimatedSprite(load_image('el.png'), 9, 1, 850 - 51, 20, all_sprites, 35))
-    chest = Tile('chest.png', (1000, 150), 'floor')
-    gg_right = AnimatedSprite(load_image("right_player.png"), 8, 1, rect[0], rect[1], sprites, 15)
-    gg_left = AnimatedSprite(load_image("left_player.png"), 8, 1, rect[0], rect[1], sprites, 15)
-    gg_sprite = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, rect[0], rect[1], all_sprites, 15)
-    gg_stop_r = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, rect[0], rect[1], sprites, 15)
-    gg_stop_l = AnimatedSprite(load_image("left_player_stop.png"), 1, 1, rect[0], rect[1], sprites, 15)
-    words = ['Во время игры вам будут попадаться записки',
-             'В них будут вложены подказки по игре и',
-             'сюжету. После прочтения записок вы попадете',
-             'на следующий уровень']
-    game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
-         npc, gg_rect=gg_sprite.rect, lvl='txt1.txt')
+    gerl = AnimatedSprite(load_image("gerl.png"), 1, 7, gerl_x, gerl_y, all_sprites, 15)
+    el = AnimatedSprite(load_image('el.png'), 9, 1, el_x, el_y, all_sprites, 35)
+    walls.append(el)
+    chest = Tile('chest.png', (chest_x, chest_y), 'floor')
+    gg_right = AnimatedSprite(load_image("right_player.png"), 8, 1, gg_left_x, gg_left_y, sprites, 15)
+    gg_left = AnimatedSprite(load_image("left_player.png"), 8, 1, gg_left_x, gg_left_y, sprites, 15)
+    gg_sprite = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, gg_sprite_x, gg_sprite_y, all_sprites, 15)
+    gg_stop_r = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, gg_left_x, gg_left_y, sprites, 15)
+    gg_stop_l = AnimatedSprite(load_image("left_player_stop.png"), 1, 1, gg_sprite_x, gg_sprite_y, sprites, 15)
+    game(walls, floor, wall_1, wall_2, wall_3, wall_4, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
+         'lvl1', el=el, gerl=gerl, npc=npc, npc_boss=None)
 
 
-def lvl2(rect):
+def lvl2(lvl='lvl2', wall_1_x=850, wall_1_y=224, wall_2_x=850, wall_2_y=610, wall_3_x=155,
+         wall_3_y=384, wall_4_x=1545, wall_4_y=384, floor_x=850, floor_y=450, npc_x=750, npc_y=500,
+         chest_x=350, chest_y=325, gg_left_x=350, gg_left_y=450, gg_sprite_x=350, gg_sprite_y=450,
+         gerl_x=None, gerl_y=None, el_x=None, el_y=None, npc_boss_x=None, npc_boss_y=None):
     walls = list()
-    walls.append(Tile('up_wall_lvl2.png', (850, 450 - 226), 'wall'))
-    walls.append(Tile('dawn_wall_lvl2.png', (850, 450 + 160), 'wall'))
-    walls.append(Tile('side_wall_Lvl2.png', (850 - 695, 450 - 66), 'wall'))
-    walls.append(Tile('side_wall_Lvl2.png', (850 + 695, 450 - 66), 'wall'))
-    floor = Tile('floorLvl2.png', (850, 450), 'floor')
-    npc = AnimatedSprite(load_image("npc_mir.png"), 3, 1, 750, 500, all_sprites, 30)
+    wall_1 = Tile('up_wall_lvl2.png', (wall_1_x, wall_1_y), 'wall')
+    wall_2 = Tile('dawn_wall_lvl2.png', (wall_2_x, wall_2_y), 'wall')
+    wall_3 = Tile('side_wall_lvl2.png', (wall_3_x, wall_3_y), 'wall')
+    wall_4 = Tile('side_wall_lvl2.png', (wall_4_x, wall_4_y), 'wall')
+    walls.extend([wall_1, wall_2, wall_3, wall_4])
+    floor = Tile('floorLvl2.png', (floor_x, floor_y), 'floor')
+    npc = AnimatedSprite(load_image("npc_mir.png"), 3, 1, npc_x, npc_y, all_sprites, 30)
     walls.append(npc)
-    chest = Tile('chest.png', (350, 325), 'wall')
-    gg_right = AnimatedSprite(load_image("right_player.png"), 8, 1, rect[0], rect[1], sprites, 15)
-    gg_left = AnimatedSprite(load_image("left_player.png"), 8, 1, rect[0], rect[1], sprites, 15)
-    gg_sprite = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, rect[0], rect[1], all_sprites, 15)
-    gg_stop_r = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, rect[0], rect[1], sprites, 15)
-    gg_stop_l = AnimatedSprite(load_image("left_player_stop.png"), 1, 1, rect[0], rect[1], sprites, 15)
-    words = ['Будте готовы встретить ']
-    game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
-         npc, gg_rect=gg_sprite.rect, lvl='txt2.txt')
+    chest = Tile('chest.png', (chest_x, chest_y), 'floor')
+    gg_right = AnimatedSprite(load_image("right_player.png"), 8, 1, gg_left_x, gg_left_y, sprites, 15)
+    gg_left = AnimatedSprite(load_image("left_player.png"), 8, 1, gg_left_x, gg_left_y, sprites, 15)
+    gg_sprite = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, gg_sprite_x, gg_sprite_y, all_sprites, 15)
+    gg_stop_r = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, gg_left_x, gg_left_y, sprites, 15)
+    gg_stop_l = AnimatedSprite(load_image("left_player_stop.png"), 1, 1, gg_sprite_x, gg_sprite_y, sprites, 15)
+    game(walls, floor, wall_1, wall_2, wall_3, wall_4, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
+         'lvl2', el=None, gerl=None, npc=npc, npc_boss=None)
 
 
-def lvl3(rect):
+def lvl3(lvl='lvl3', wall_1_x=850, wall_1_y=72, wall_2_x=850, wall_2_y=760, wall_3_x=382,
+         wall_3_y=382, wall_4_x=1318, wall_4_y=382, floor_x=850, floor_y=450, npc_x=None, npc_y=None,
+         chest_x=350, chest_y=350, gg_left_x=650, gg_left_y=450, gg_sprite_x=650, gg_sprite_y=450,
+         gerl_x=None, gerl_y=None, el_x=None, el_y=None, npc_boss_x=750, npc_boss_y=100):
     walls = list()
-    walls.append(Tile('up_wall_lvl1.png', (850, 450 - 378), 'wall'))
-    walls.append(Tile('dawn_wall_lvl1.png', (850, 450 + 310), 'wall'))
-    walls.append(Tile('side_wall.png', (850 - 468, 450 - 68), 'wall'))
-    walls.append(Tile('side_wall.png', (850 + 468, 450 - 68), 'wall'))
-    floor = Tile('floorLvl1.png', (850, 450), 'floor')
-    npc_boss = AnimatedSprite(load_image("npc.png"), 11, 1, 750, 100, all_sprites, 25)
+    wall_1 = Tile('up_wall_lvl1.png', (wall_1_x, wall_1_y), 'wall')
+    wall_2 = Tile('dawn_wall_lvl1.png', (wall_2_x, wall_2_y), 'wall')
+    wall_3 = Tile('side_wall.png', (wall_3_x, wall_3_y), 'wall')
+    wall_4 = Tile('side_wall.png', (wall_4_x, wall_4_y), 'wall')
+    walls.extend([wall_1, wall_2, wall_3, wall_4])
+    floor = Tile('floorLvl1.png', (floor_x, floor_y), 'floor')
+    npc_boss = AnimatedSprite(load_image("npc.png"), 11, 1, npc_boss_x, npc_boss_y, all_sprites, 25)
     walls.append(npc_boss)
-    chest = Tile('chest.png', (350, 325), 'wall')
-    gg_right = AnimatedSprite(load_image("right_player.png"), 8, 1, 850, 450, sprites, 15)
-    gg_left = AnimatedSprite(load_image("left_player.png"), 8, 1, 850, 450, sprites, 15)
-    gg_sprite = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, 850, 450, all_sprites, 15)
-    gg_stop_r = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, 850, 450, sprites, 15)
-    gg_stop_l = AnimatedSprite(load_image("left_player_stop.png"), 1, 1, 850, 450, sprites, 15)
-    game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
-         npc_boss, gg_rect=gg_sprite.rect, lvl='txt3.txt')
+    chest = Tile('chest.png', (chest_x, chest_y), 'floor')
+    gg_right = AnimatedSprite(load_image("right_player.png"), 8, 1, gg_left_x, gg_left_y, sprites, 15)
+    gg_left = AnimatedSprite(load_image("left_player.png"), 8, 1, gg_left_x, gg_left_y, sprites, 15)
+    gg_sprite = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, gg_sprite_x, gg_sprite_y, all_sprites, 15)
+    gg_stop_r = AnimatedSprite(load_image("right_player_stop.png"), 1, 1, gg_left_x, gg_left_y, sprites, 15)
+    gg_stop_l = AnimatedSprite(load_image("left_player_stop.png"), 1, 1, gg_sprite_x, gg_sprite_y, sprites, 15)
+    game(walls, floor, wall_1, wall_2, wall_3, wall_4, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
+         'lvl3', el=None, gerl=None, npc=None, npc_boss=npc_boss)
 
 
-def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l,
-         npc, gg_rect=None, lvl=None):
+def game(walls, floor, wall_1, wall_2, wall_3, wall_4, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l, lvl,
+         el=None, gerl=None, npc=None, npc_boss=None):
     move_right = False
     move_left = False
     move_up = False
@@ -159,7 +167,7 @@ def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l
 
             if event.type == pygame.KEYUP and event.key == pygame.K_n:
                 if n_press:
-                    if lvl == 'txt1.txt':
+                    if lvl == 'lvl1':
                         if not text4:
                             sprites_note.add(scroll_npc)
                             text4 = True
@@ -177,7 +185,7 @@ def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l
                             return
             if event.type == pygame.KEYUP and event.key == pygame.K_f:
                 if f_press:
-                    if lvl == 'txt1.txt':
+                    if lvl == 'lvl1':
                         if not text1:
                             sprites_note.add(scroll)
                             text1 = True
@@ -234,12 +242,12 @@ def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l
         all_sprites.update()
         clock.tick(150)
         f_press = False
-        if lvl != 'txt3.txt':
+        if lvl != 'lvl3':
             if pygame.sprite.collide_rect(gg_stop_l, npc):
                 screen.blit(text2, (350, 600))
                 n_press = True
-        if lvl == 'txt3.txt':
-            if pygame.sprite.collide_rect(gg_stop_l, npc):
+        if lvl == 'lvl3':
+            if pygame.sprite.collide_rect(gg_stop_l, npc_boss):
                 screen.blit(text5, (350, 600))
                 enter_press = True
         if pygame.sprite.collide_rect(gg_stop_l, chest):
@@ -259,21 +267,67 @@ def game(walls, floor, chest, gg_right, gg_left, gg_sprite, gg_stop_r, gg_stop_l
             scroll_npc.read()
         pygame.display.update()
         pygame.display.flip()
-
+    if lvl == 'lvl1':
+        cur.execute('''INSERT INTO save(lvl, wall_1_x, wall_1_y, wall_2_x, wall_2_y, wall_3_x, wall_3_y, wall_4_x, 
+        wall_4_y, floor_x, floor_y, npc_x, npc_y, chest_x, chest_y, gg_left_x, gg_left_y, gg_sprite_x, gg_sprite_y, 
+        gerl_x, gerl_y, el_x, el_y) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+                    (lvl, wall_1.rect.center[0], wall_1.rect.center[1], wall_2.rect.center[0], wall_2.rect.center[1],
+                     wall_3.rect.center[0], wall_3.rect.center[1], wall_4.rect.center[0], wall_4.rect.center[1],
+                     floor.rect.center[0], floor.rect.center[1], npc.rect[0], npc.rect[1], chest.rect.center[0],
+                     chest.rect.center[1], gg_left.rect.x, gg_left.rect.y, gg_sprite.rect.x, gg_sprite.rect.y,
+                     gerl.rect.x, gerl.rect.y, el.rect.x, el.rect.y,))
+    elif lvl == 'lvl2':
+        cur.execute('''INSERT INTO save(lvl, wall_1_x, wall_1_y, wall_2_x, wall_2_y, wall_3_x, wall_3_y, wall_4_x, 
+        wall_4_y, floor_x, floor_y, npc_x, npc_y, chest_x, chest_y, gg_left_x, gg_left_y, gg_sprite_x, gg_sprite_y) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+                    (lvl, wall_1.rect.center[0], wall_1.rect.center[1], wall_2.rect.center[0], wall_2.rect.center[1],
+                     wall_3.rect.center[0], wall_3.rect.center[1], wall_4.rect.center[0], wall_4.rect.center[1],
+                     floor.rect.center[0], floor.rect.center[1], npc.rect[0], npc.rect[1], chest.rect.center[0],
+                     chest.rect.center[1], gg_left.rect.x, gg_left.rect.y, gg_sprite.rect.x, gg_sprite.rect.y,))
+    else:
+        cur.execute('''INSERT INTO save(lvl, wall_1_x, wall_1_y, wall_2_x, wall_2_y, wall_3_x, wall_3_y, wall_4_x, 
+        wall_4_y, floor_x, floor_y, chest_x, chest_y, gg_left_x, gg_left_y, gg_sprite_x, gg_sprite_y, npc_boss_x, 
+        npc_boss_y) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+                    (lvl, wall_1.rect.center[0], wall_1.rect.center[1], wall_2.rect.center[0], wall_2.rect.center[1],
+                     wall_3.rect.center[0], wall_3.rect.center[1], wall_4.rect.center[0], wall_4.rect.center[1],
+                     floor.rect.center[0], floor.rect.center[1], chest.rect.center[0],
+                     chest.rect.center[1], gg_left.rect.x, gg_left.rect.y, gg_sprite.rect.x, gg_sprite.rect.y,
+                     npc_boss.rect.x, npc_boss.rect.y,))
+    con.commit()
     pygame.quit()
 
 
-def main(file='lvl1.txt', rect=None):
-    if file == 'lvl1.txt':
-        lvl1(rect=(850, 450))
-        file = 'lvl2.txt'
+def main(result):
+    number, lvl, floor_x, floor_y, wall_1_x, wall_1_y, wall_2_x, wall_2_y, wall_3_x, wall_3_y, wall_4_x, \
+    wall_4_y, chest_x, chest_y, gg_left_x, gg_left_y, gg_sprite_x, gg_sprite_y, el_x, el_y, gerl_x, \
+    gerl_y, npc_x, npc_y, npc_boss_x, npc_boss_y = result
+    if lvl == 'lvl1':
+        lvl1(lvl, floor_x, floor_y, wall_1_x, wall_1_y, wall_2_x, wall_2_y, wall_3_x, wall_3_y, wall_4_x,
+             wall_4_y, chest_x, chest_y, gg_left_x, gg_left_y, gg_sprite_x, gg_sprite_y, el_x, el_y, gerl_x,
+             gerl_y, npc_x, npc_y, npc_boss_x, npc_boss_y)
         clean()
-    if file == 'lvl2.txt':
-        lvl2(rect=(350, 450))
-        file = 'lvl3.txt'
+        lvl, floor_x, floor_y, wall_1_x, wall_1_y, wall_2_x, wall_2_y, wall_3_x, wall_3_y, wall_4_x, \
+        wall_4_y, chest_x, chest_y, gg_left_x, gg_left_y, gg_sprite_x, gg_sprite_y, el_x, el_y, gerl_x, \
+        gerl_y, npc_x, npc_y, npc_boss_x, npc_boss_y = [None for i in range(25)]
+    if floor_x:
+        if lvl == 'lvl2':
+            lvl2(lvl, floor_x, floor_y, wall_1_x, wall_1_y, wall_2_x, wall_2_y, wall_3_x, wall_3_y, wall_4_x, \
+                 wall_4_y, chest_x, chest_y, gg_left_x, gg_left_y, gg_sprite_x, gg_sprite_y, el_x, el_y, gerl_x, \
+                 gerl_y, npc_x, npc_y, npc_boss_x, npc_boss_y)
+            clean()
+            lvl3()
+            clean()
+        if lvl == 'lvl3':
+            lvl3(lvl, floor_x, floor_y, wall_1_x, wall_1_y, wall_2_x, wall_2_y, wall_3_x, wall_3_y, wall_4_x, \
+                 wall_4_y, chest_x, chest_y, gg_left_x, gg_left_y, gg_sprite_x, gg_sprite_y, el_x, el_y, gerl_x, \
+                 gerl_y, npc_x, npc_y, npc_boss_x, npc_boss_y)
+            clean()
+
+    else:
+        lvl2()
         clean()
-    if file == 'lvl3.txt':
-        lvl3(rect)
+        lvl3()
+        clean()
 
 
 def clean():

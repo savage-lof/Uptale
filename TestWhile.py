@@ -1,16 +1,11 @@
 import pygame
 import time
 from TestLoadGame import load_image
-from TestGame import game, main
+from TestGame import main
 from screen import screen
-import sqlite3
+from save import result, first_result
 
 pygame.init()
-con = sqlite3.connect("uptale.db")
-cur = con.cursor()
-result = cur.execute("""SELECT * FROM save ORDER BY ID DESC LIMIT 1""").fetchone()
-rect = (result[1], result[2])
-file = result[3]
 
 
 def start():
@@ -31,11 +26,10 @@ def start():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pos()[0] >= 80 and pygame.mouse.get_pos()[1] >= 285:
                     if pygame.mouse.get_pos()[0] <= 515 and pygame.mouse.get_pos()[1] <= 370:
-                        main()
+                        main(first_result)
                 if pygame.mouse.get_pos()[0] >= 80 and pygame.mouse.get_pos()[1] >= 441:
                     if pygame.mouse.get_pos()[0] <= 565 and pygame.mouse.get_pos()[1] <= 515:
-                        print(result)
-                        main(file, rect)
+                        main(result)
                 if pygame.mouse.get_pos()[0] >= 80 and pygame.mouse.get_pos()[1] >= 614:
                     if pygame.mouse.get_pos()[0] <= 330 and pygame.mouse.get_pos()[1] <= 685:
                         running = False
