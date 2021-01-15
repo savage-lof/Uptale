@@ -14,7 +14,7 @@ vertical_borders_sprites = pygame.sprite.Group()
 border_left_x = (width / 2 - horizontal_border_size / 2) - 1
 border_top_y = (height / 2 + 50) - 1
 border_right_x = border_left_x + horizontal_border_size + 1
-border_bottom_y = border_top_y + vertical_border_size + 1
+border_bottom_y = border_top_y + vertical_border_size
 
 player_sprite = pygame.sprite.Group()
 blinking_sprites = pygame.sprite.Group()
@@ -330,6 +330,8 @@ def internal_fighting():
             return False
 
         if gt.cur_time == 0:
+            pygame.mixer.music.stop()
+            soundObj.stop()
             win()
             return True
 
@@ -368,7 +370,6 @@ class Dead(pygame.sprite.Sprite):
         self.image = Dead.image
         self.image = pygame.transform.scale(self.image, (width, height))
         self.rect = self.image.get_rect()
-        print(self.rect)
         self.x = -self.rect.width
         self.rect.x = -self.rect.width
         self.rect.y = 0
@@ -416,5 +417,5 @@ def fighting():
             return True
         want_play = dead()
         if not want_play and want_play is not None:
+            pygame.mixer.music.stop()
             sys.exit()
-    return False
