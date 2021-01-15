@@ -26,8 +26,8 @@ camera = Camera()
 scroll = Scroll(sprites_note, ['Во время игры вам будут попадаться записки',
                                'В них будут вложены подказки по игре и',
                                'сюжету.'])
-scroll2 = Scroll(sprites_note, ['Привет',
-                                'Пока.'])
+scroll2 = Scroll(sprites_note, ['Мало кому удавалось уйти отсюда живым'])
+scroll3 = Scroll(sprites_note, ['Что ж удачи тебе'])
 
 scroll_npc = Diolog(sprites_note, ['Дарова странник!',
                                    'Я призвал тебя!',
@@ -37,7 +37,7 @@ scroll_npc = Diolog(sprites_note, ['Дарова странник!',
 scroll_npc2 = Diolog(sprites_note, ['Дарова ещё раз странник!',
                                     'Тебе прямо по коридору'])
 
-sprites_note.remove(scroll, scroll2, scroll_npc, scroll_npc2)
+sprites_note.remove(scroll, scroll2, scroll3, scroll_npc, scroll_npc2)
 
 
 def lvl1(lvl='lvl1', wall_1_x=850, wall_1_y=72, wall_2_x=850, wall_2_y=760, wall_3_x=610,
@@ -199,6 +199,7 @@ def game(walls, floor, wall_1, wall_2, wall_3, wall_4, chest, gg_right, gg_left,
                         else:
                             sprites_note.remove(scroll2)
                             text11 = False
+
             if event.type == pygame.KEYUP and event.key == pygame.K_e:
                 if enter_press:
                     fighting()
