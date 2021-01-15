@@ -2,9 +2,10 @@ import pygame
 import sys
 from TestStartSceenClass import GameScreen, GameScreenWin
 from screen import screen
+from save import save
 
 
-def screen_start():
+def screen_start(lvl, floor, wall_1, wall_2, wall_3, wall_4, chest, gg_left, gg_sprite, el, gerl, npc, npc_boss):
     all_sprites = pygame.sprite.Group()
     vehicle = GameScreen(all_sprites)
 
@@ -20,10 +21,7 @@ def screen_start():
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pos()[0] in range(125, 690) and pygame.mouse.get_pos()[1] in range(360, 425):
-                    f = open('save.txt', 'w')
-                    a = 'Сэйв сделаем к пятнице ;)'
-                    f.write(a)
-                    f.close()
+                    save(lvl, floor, wall_1, wall_2, wall_3, wall_4, chest, gg_left, gg_sprite, el, gerl, npc, npc_boss)
                 if pygame.mouse.get_pos()[0] in range(95, 706) and pygame.mouse.get_pos()[1] in range(507, 568):
                     running = False
                 if pygame.mouse.get_pos()[0] in range(255, 550) and pygame.mouse.get_pos()[1] in range(642, 693):
@@ -49,16 +47,8 @@ def win():
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if pygame.mouse.get_pos()[0] in range(125, 690) and pygame.mouse.get_pos()[1] in range(360, 425):
-                    f = open('save.txt', 'w')
-                    a = str()
-                    f.write(a)
-                    f.close()
-                if pygame.mouse.get_pos()[0] in range(95, 706) and pygame.mouse.get_pos()[1] in range(507, 568):
-                    running = False
-                if pygame.mouse.get_pos()[0] in range(255, 550) and pygame.mouse.get_pos()[1] in range(642, 693):
-                    pygame.quit()
-                    sys.exit()
+                pygame.quit()
+                sys.exit()
 
         all_sprites.draw(screen)
         vehicle.update(fps)

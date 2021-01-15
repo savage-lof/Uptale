@@ -3,7 +3,7 @@ import time
 from TestLoadGame import load_image
 from TestGame import main
 from screen import screen
-from save import result, first_result
+from bd import result, first_result
 
 pygame.init()
 
