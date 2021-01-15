@@ -1,7 +1,9 @@
 import pygame
 import random
+import sys
+from TestStartScreen import win
 
-width, height = 1600, 900
+width, height = 800, 800
 
 horizontal_border_size = 350
 horizontal_borders_sprites = pygame.sprite.Group()
@@ -12,7 +14,7 @@ vertical_borders_sprites = pygame.sprite.Group()
 border_left_x = (width / 2 - horizontal_border_size / 2) - 1
 border_top_y = (height / 2 + 50) - 1
 border_right_x = border_left_x + horizontal_border_size + 1
-border_bottom_y = border_top_y + vertical_border_size + 1
+border_bottom_y = border_top_y + vertical_border_size
 
 player_sprite = pygame.sprite.Group()
 blinking_sprites = pygame.sprite.Group()
@@ -269,7 +271,7 @@ def internal_fighting():
     dt = 0
     clock = pygame.time.Clock()
 
-    idle_enemy = AnimatedSprite(pygame.image.load('data/npc.png'), 11, 1, border_left_x + 75,
+    idle_enemy = AnimatedSprite(pygame.image.load('data/npc2.png'), 11, 1, border_left_x + 75,
                                 border_top_y - 200, False)
     attack_enemy = AnimatedSprite(pygame.image.load('data/npc_attack.png'), 17, 1,
                                   border_left_x + 75, border_top_y - 200, True)
@@ -328,6 +330,9 @@ def internal_fighting():
             return False
 
         if gt.cur_time == 0:
+            pygame.mixer.music.stop()
+            soundObj.stop()
+            win()
             return True
 
         screen.fill(pygame.Color('black'))
@@ -365,7 +370,6 @@ class Dead(pygame.sprite.Sprite):
         self.image = Dead.image
         self.image = pygame.transform.scale(self.image, (width, height))
         self.rect = self.image.get_rect()
-        print(self.rect)
         self.x = -self.rect.width
         self.rect.x = -self.rect.width
         self.rect.y = 0
@@ -413,5 +417,5 @@ def fighting():
             return True
         want_play = dead()
         if not want_play and want_play is not None:
-            break
-    return False
+            pygame.mixer.music.stop()
+            sys.exit()
