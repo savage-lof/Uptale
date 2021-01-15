@@ -91,7 +91,7 @@ def lvl2(lvl='lvl2', wall_1_x=850, wall_1_y=224, wall_2_x=850, wall_2_y=610, wal
 
 def lvl3(lvl='lvl3', wall_1_x=850, wall_1_y=72, wall_2_x=850, wall_2_y=760, wall_3_x=382,
          wall_3_y=382, wall_4_x=1318, wall_4_y=382, floor_x=850, floor_y=450, npc_x=None, npc_y=None,
-         chest_x=350, chest_y=350, gg_left_x=650, gg_left_y=450, gg_sprite_x=650, gg_sprite_y=450,
+         chest_x=550, chest_y=350, gg_left_x=650, gg_left_y=450, gg_sprite_x=650, gg_sprite_y=450,
          gerl_x=None, gerl_y=None, el_x=None, el_y=None, npc_boss_x=750, npc_boss_y=100):
     walls = list()
     wall_1 = Tile('up_wall_lvl1.png', (wall_1_x, wall_1_y), 'wall')
